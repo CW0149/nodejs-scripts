@@ -11,6 +11,8 @@ const data = require('./config').createDirConfig
 const baseDir = process.argv[2] || data.path || __dirname
 let bookRootDir = path.resolve(baseDir, data.rootDirName)
 
+console.log(bookRootDir)
+
 function mkdir(path) {
 	console.log('mkdir', path)
 	try {
@@ -74,26 +76,25 @@ function mkdirAndFielsForObj(obj, props) {
 }
 
 function clean(baseDir) {
-	bookRootDir = path.resolve(baseDir, data.rootDirName) || bookRootDir
-	try {
-		fs.statSync(bookRootDir)
-		child_process.exec(`rm -rf ${bookRootDir}`, (error, stdout, stderr) => {
-      if (error) {
-        console.log(error.stack)
-        console.log('Error code: '+error.code)
-        console.log('Signal received: '+error.signal)
-      }
-    })
-	} catch (e) {
-		// console.log(e)
+	bookRootDir = baseDir ? path.resolve(baseDir, `./${data.rootDirName}`) : bookRootDir
+
+	const pathExists = fs.existsSync(bookRootDir)
+	if (pathExists) {
+			child_process.exec(`rm -rf ${bookRootDir}`, (error, stdout, stderr) => {
+	      if (error) {
+	        console.log(error.stack)
+	        console.log('Error code: '+error.code)
+	        console.log('Signal received: '+error.signal)
+	      }
+	    })
 	}
 }
 
 function createBookDirs(baseDir) {
-	bookRootDir = path.resolve(baseDir, data.rootDirName) || bookRootDir
-	try {
-		fs.statSync(bookRootDir)
-	} catch (e) {
+	bookRootDir = baseDir ? path.resolve(baseDir, `./${data.rootDirName}`) : bookRootDir
+
+	const pathExists = fs.existsSync(bookRootDir)
+	if (!pathExists) {
 		mkdirSync(bookRootDir)
 	}
 	const { routes, commonFiles } = data
@@ -107,7 +108,7 @@ function createBookDirs(baseDir) {
 
 
 
-// createBookDirs()
+createBookDirs()
 // clean()
 
 module.exports = (command, ...options) => {
