@@ -34,7 +34,6 @@ function treeDir(_path, _box) {
 
 		if (fs.statSync(filePath).isDirectory()) {
 			const chidDir = createDirObj(filename)
-			console.log(_box, _box.dir)
 			_box.dir.push(chidDir)
 			treeDir(filePath, chidDir)
 		} else {
