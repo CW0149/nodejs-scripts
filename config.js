@@ -1,5 +1,5 @@
 const createDirConfig = {
-	path: '/Users/username/Desktop/', // 默认在执行文件根路径, optional 可以是绝对路径或相对路径
+	// path: '/Users/username/Desktop/', // 默认在执行文件根路径, optional 可以是绝对路径或相对路径
 	rootDirName: 'book',
 	commonFiles: ['README.md', 'a.md'], // 其下子目录都拥有，不含本身
 	routes:  [
@@ -7,7 +7,7 @@ const createDirConfig = {
 			name: '入门与进阶',
 			commonFiles: ['haha.md'],
 			files: ['前言.md'], // 目录下文件
-			sub: [{
+			dir: [{
 				name: '子目录'
 			}]
 		},
@@ -29,4 +29,8 @@ const createDirConfig = {
 	]
 }
 
-module.exports = { createDirConfig }
+const treeDirConfig = {
+	ignore: ['./.git', './node_modules', './.DS_Store']
+}
+
+module.exports = { createDirConfig, treeDirConfig }

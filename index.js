@@ -2,7 +2,7 @@ const { argv } = require('process')
 const path = require('path')
 const { exec } = require('child_process')
 
-const [binPath, execPath, scriptName, ...scriptArgs] = argv
+const [binPath, fileDirPath, scriptName, ...scriptArgs] = argv
 
 if (!scriptName) {
 	return console.log('无效的脚本名')

@@ -44,7 +44,7 @@ function mkdirAndFielsForObj(obj, props) {
 
 
 	const filesEmpty = isArrayEmpty(obj.files)
-	const subEmpty = isArrayEmpty(obj.sub)
+	const subEmpty = isArrayEmpty(obj.dir)
 	if (filesEmpty && subEmpty) {
 		return mkdir(obj.path, () => {}) // zero success -1 failed
 	}
@@ -63,7 +63,7 @@ function mkdirAndFielsForObj(obj, props) {
 		}
 
 		if (!subEmpty) {
-			for (let item of obj.sub) {
+			for (let item of obj.dir) {
 				const { path, commonFiles } = obj
 				status = mkdirAndFielsForObj(item, { path, commonFiles }) && status
 			}
@@ -76,7 +76,8 @@ function mkdirAndFielsForObj(obj, props) {
 }
 
 function clean(baseDir) {
-	bookRootDir = baseDir ? path.resolve(baseDir, `./${data.rootDirName}`) : bookRootDir
+	bookRootDir = getRootDir(baseDir)
+	if (!bookRootDir) return
 
 	const pathExists = fs.existsSync(bookRootDir)
 	if (pathExists) {
@@ -91,7 +92,8 @@ function clean(baseDir) {
 }
 
 function createBookDirs(baseDir) {
-	bookRootDir = baseDir ? path.resolve(baseDir, `./${data.rootDirName}`) : bookRootDir
+	bookRootDir = getRootDir(baseDir)
+	if (!bookRootDir) return
 
 	const pathExists = fs.existsSync(bookRootDir)
 	if (!pathExists) {
@@ -104,6 +106,16 @@ function createBookDirs(baseDir) {
 	routes.forEach((obj) => {
 		mkdirAndFielsForObj(obj, { path: bookRootDir, commonFiles })
 	})
+}
+
+function getRootDir(baseDir) {
+	let dir = ''
+	try {
+		dir = baseDir ? path.resolve(baseDir, `./${data.rootDirName}`) : bookRootDir
+	} catch (err) {
+		console.log(error)
+	}
+	return dir
 }
 
 
@@ -120,6 +132,6 @@ module.exports = (command, ...options) => {
 			clean(...options)
 			break
 		default:
-			console.log(`createDir脚本不存在${command}指令`)
+			console.log(`createDir脚本不存在${command}指令，可选择create/clean脚本指令，然后接路径参数`)
 	}
 }
