@@ -30,7 +30,7 @@ const createDirConfig = {
 }
 
 const treeDirConfig = {
-	ignore: ['./.git', './node_modules', './.DS_Store']
+	ignore: ['./.git', './node_modules', '.DS_Store'] // 可写路径，如果写文件名则所有匹配名称的都会被忽略
 }
 
 module.exports = { createDirConfig, treeDirConfig }

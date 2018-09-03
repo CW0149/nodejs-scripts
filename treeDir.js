@@ -30,7 +30,7 @@ function treeDir(_path, _box) {
 	for (let filename of dirFiles) {
 		const filePath = path.resolve(_path, filename)
 
-		if (ignoredPaths[filePath]) continue
+		if (ignoredPaths[filePath] || ignoredPaths[filename]) continue
 
 		if (fs.statSync(filePath).isDirectory()) {
 			const chidDir = createDirObj(filename)
