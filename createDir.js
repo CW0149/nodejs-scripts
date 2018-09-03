@@ -8,7 +8,7 @@ const child_process = require('child_process')
 const data = require('./config').createDirConfig
 
 // 接受命令行传参 config配置, 默认当前路径
-const baseDir = process.argv[2] || data.absolutePath || __dirname
+const baseDir = process.argv[2] || data.path || __dirname
 let bookRootDir = path.resolve(baseDir, data.rootDirName)
 
 function mkdir(path) {

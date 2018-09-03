@@ -1,12 +1,12 @@
 const createDirConfig = {
-	absolutePath: '/Users/ryan/Desktop/', // 默认在执行文件根路径, optional
+	path: '/Users/username/Desktop/', // 默认在执行文件根路径, optional 可以是绝对路径或相对路径
 	rootDirName: 'book',
 	commonFiles: ['README.md', 'a.md'], // 其下子目录都拥有，不含本身
 	routes:  [
 		{
 			name: '入门与进阶',
 			commonFiles: ['haha.md'],
-			files: ['前言.md'],
+			files: ['前言.md'], // 目录下文件
 			sub: [{
 				name: '子目录'
 			}]
