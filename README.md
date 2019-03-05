@@ -10,7 +10,7 @@ node 6.x版本以上运行。
 
 根据配置生成文件夹和文件
 
-* 可以根据config.js里面的createDirConfig生成对应的目录和文件树
+* 可以根据 config.js 里面的 createDirConfig 生成对应的目录和文件树
 * 支持清空生成的文件
 * 定义生成的文件夹所处位置优先级：命令行传参数(第一个参数) > createDirConfig.path > 默认的createDir.js文件所在目录
 * [配置示例](./static/images/createDirConfig.png)
@@ -29,6 +29,7 @@ node ./ createDir clean [path] // 清除path.resolve(process.cwd(), path)book文
 
 * 生成目录结构，结果保存在命令行路径的dirTree.json
 * 接受命令行参数，第一个参数为要打印的文件夹路径
+* config.js 中的 treeDirConfig 可配置目录树中忽略的文件夹和文件
 * [结果示例](./static/images/dirTreeResult.png)
 
 ```
