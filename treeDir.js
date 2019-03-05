@@ -1,46 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const { argv } = require('process')
-
-const { treeDirConfig } = require('./config') // 设置了忽略的文件
-
-const [binPath, fileDirPath, ...leftArgv] = argv
-
-// const baseDir = leftArgv[0] ? path.resolve(leftArgv)
-let baseDir = ''
-try {
-	baseDir = leftArgv[0] ? path.resolve(leftArgv[0]) : __dirname
-} catch (err) {
-	baseDir = __dirname
-	console.log(err)
-	console.log('使用默认路径__dirname')
-}
-
-console.log('打印路径文件夹为： ', baseDir)
-
-const ignoredPaths = {}
-treeDirConfig.ignore.forEach((item) => {
-	ignoredPaths[path.resolve(baseDir, item)] = true
-})
-
-const result = createDirObj('root')
-
-function treeDir(_path, _box) {
-	const dirFiles = fs.readdirSync(_path)
-	for (let filename of dirFiles) {
-		const filePath = path.resolve(_path, filename)
-
-		if (ignoredPaths[filePath] || ignoredPaths[filename]) continue
-
-		if (fs.statSync(filePath).isDirectory()) {
-			const chidDir = createDirObj(filename)
-			_box.dir.push(chidDir)
-			treeDir(filePath, chidDir)
-		} else {
-			_box.files.push(filename)
-		}
-	}
-}
 
 function createDirObj(dirName) {
 	return {
@@ -50,13 +9,46 @@ function createDirObj(dirName) {
 	}
 }
 
-function run() {
-	treeDir(baseDir, result)
+
+function init(baseDir) {
+	const { treeDirConfig } = require('./config') // 设置了忽略的文件
+	console.log('打印路径文件夹为： ', path.resolve(baseDir))
+
+	const ignoredPaths = treeDirConfig.ignore || []
+
+	return [baseDir, ignoredPaths]
+}
+
+function treeDir(_path, ignoredPaths, _box) {
+	const dirFiles = fs.readdirSync(_path)
+	for (let filename of dirFiles) {
+		const filePath = path.resolve(_path, filename)
+		let ignored = false
+		for (let reg of ignoredPaths) {
+			if (new RegExp(reg).test(filename)) {
+				ignored = true
+				break
+			}
+		}
+		if (ignored) continue
+
+		if (fs.statSync(filePath).isDirectory()) {
+			const chidDir = createDirObj(filename)
+			_box.dir.push(chidDir)
+			treeDir(filePath, ignoredPaths, chidDir)
+		} else {
+			_box.files.push(filename)
+		}
+	}
+}
+
+function run(cmdPath, baseDir = cmdPath) {
+	const result = createDirObj(path.basename(path.resolve(baseDir)))
+
+	treeDir(...init(baseDir), result)
 	fs.writeFileSync('./dirTree.json', JSON.stringify(result, null, 2))
 }
 
-run()
-
-module.exports = { run }
+module.exports = run
 
 

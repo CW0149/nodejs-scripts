@@ -1,8 +1,9 @@
-const { argv } = require('process')
+const { argv, cwd } = require('process')
 const path = require('path')
 const { exec } = require('child_process')
 
 const [binPath, fileDirPath, scriptName, ...scriptArgs] = argv
+const cmdPath = cwd()
 
 if (!scriptName) {
 	return console.log('无效的脚本名')
@@ -18,10 +19,16 @@ if (!scriptName) {
 // 方法二 引入
 
 const createDir = require('./createDir.js')
+const treeDir = require('./treeDir')
+const createServer = require('./createServer')()
+
+// console.log(11111, createDir);
 
 const commandMap = { // 存储所有指令对应的脚本
-	createDir
+	createDir,
+	treeDir,
+	createServer
 }
 
-commandMap[scriptName](...scriptArgs)
+commandMap[scriptName](cmdPath, ...scriptArgs)
 
