@@ -13,7 +13,7 @@ module.exports = function() {
 				}
 		    res.end()
 			}).listen(port, function() {
-				console.log(`listening port: ${port}\nopen url http://127.0.0.1:${port}`, )
+				console.log(`listening port: ${port}\nopen url http://127.0.0.1:${port}`)
 			})
 	}
 }
